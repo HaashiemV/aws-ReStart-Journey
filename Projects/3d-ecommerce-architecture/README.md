@@ -1,3 +1,5 @@
+![3D E-Commerce AWS Architecture](aws-architecture-diagram.png)
+
 3D E-Commerce | Multi-Region AWS Architecture
 
 A conceptual AWS architecture design exploring a secure, scalable and highly available e-commerce platform across multiple AWS regions.
