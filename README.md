@@ -26,7 +26,7 @@ A personal project designed to encourage consistency in daily prayers, thikr and
 
 Technologies: HTML, CSS, JavaScript, Amazon S3, CloudFront, Local Storage.
 
-"View Project" (projects/nur-rise/README.md) | "Live Website" (https://d1m8pbscr3biya.cloudfront.net/#home)
+[View Project](Projects/nur-rise/README.md) | [Live Website](https://d1m8pbscr3biya.cloudfront.net/#home)
 
 2. Rusty Spoon – Restaurant Website
 
