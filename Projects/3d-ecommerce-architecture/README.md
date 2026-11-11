@@ -1,4 +1,4 @@
-#3D E-Commerce | Multi-Region AWS Architecture
+# 3D E-Commerce | Multi-Region AWS Architecture
 
 ![3D E-Commerce AWS Architecture](aws-architecture-diagram.png)
 
