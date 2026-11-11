@@ -1,1 +1,171 @@
+Creating Networking Resources in an Amazon VPC
 
+Lab Overview
+
+This practical AWS re/Start lab focused on designing and configuring a Virtual Private Cloud (VPC) to establish internet connectivity for an EC2 instance.
+
+The lab was based on a customer support scenario in which a startup owner could not successfully ping resources outside their VPC.
+
+Acting as an AWS Cloud Support Engineer, I investigated the networking requirements, created the necessary AWS networking resources and configured the environment to establish outbound internet connectivity.
+
+Duration: Approximately 60 minutes
+AWS Services: Amazon VPC, EC2, Internet Gateway, Route Tables, Security Groups and Network ACLs
+Operating System: Amazon Linux 2023
+
+Customer Scenario
+
+A startup customer reported that their EC2 instance could not communicate outside their VPC.
+
+The customer had attempted to configure their network but was unable to establish internet connectivity.
+
+The objective was to investigate the configuration, identify missing networking components and implement a solution that would allow the EC2 instance to successfully communicate with the internet.
+
+Learning Objectives
+
+Through this exercise, I gained practical experience in:
+
+- Creating and configuring a custom VPC.
+- Designing and creating subnets.
+- Configuring Internet Gateways.
+- Creating and associating route tables.
+- Configuring Network Access Control Lists (NACLs).
+- Creating and configuring security groups.
+- Launching an EC2 instance inside a public subnet.
+- Connecting to an EC2 instance using SSH.
+- Troubleshooting network connectivity.
+- Testing outbound internet connectivity using "ping".
+
+1. VPC Configuration
+
+I created a custom VPC named "Test VPC".
+
+Configuration| Value
+VPC name| Test VPC
+IPv4 CIDR block| "192.168.0.0/18"
+Subnet name| Public subnet
+Subnet CIDR block| "192.168.1.0/28"
+
+CIDR note: The original lab scenario references "192.168.1.0/26", while its subnet creation instructions specify "192.168.1.0/28". The configuration above follows the detailed subnet creation instructions.
+
+A subnet provides a defined range of IP addresses within a VPC and allows AWS resources to be organised within the network.
+
+2. Internet Gateway and Route Table
+
+I created an Internet Gateway named "IGW test VPC" and attached it to the custom VPC.
+
+I then created a route table named "Public route table" and configured the internet route.
+
+Destination| Target
+"192.168.0.0/18"| Local
+"0.0.0.0/0"| Internet Gateway
+
+The "0.0.0.0/0" route directs traffic destined for external networks towards the Internet Gateway.
+
+I associated the public subnet with the public route table to ensure that resources within the subnet could use the configured internet route.
+
+3. Network Access Control List (NACL)
+
+I created a Network ACL named "Public Subnet NACL" and associated it with the VPC's public subnet.
+
+The inbound and outbound rules were configured to allow all traffic.
+
+Direction| Rule| Traffic| Source/Destination
+Inbound| 100| All traffic| "0.0.0.0/0"
+Outbound| 100| All traffic| "0.0.0.0/0"
+
+This configuration allowed traffic through the subnet-level network control layer during the lab.
+
+NACLs are stateless, meaning inbound and outbound traffic must be evaluated independently.
+
+4. Security Group Configuration
+
+I created a security group named "public security group".
+
+The security group was configured with the following inbound access:
+
+Type| Protocol| Port| Source
+SSH| TCP| 22| Anywhere
+HTTP| TCP| 80| Anywhere
+HTTPS| TCP| 443| Anywhere
+
+Outbound rules allowed all traffic.
+
+Security groups operate at the instance level and are stateful. They control which traffic is permitted to reach an EC2 instance and which outbound traffic can leave it.
+
+5. EC2 Instance Deployment
+
+I launched an Amazon EC2 instance inside the public subnet to test the networking configuration.
+
+Configuration| Value
+AMI| Amazon Linux 2023
+Instance type| "t3.micro"
+Key pair| "vockey"
+VPC| Test VPC
+Subnet| Public subnet
+Public IP assignment| Enabled
+Security group| public security group
+
+The instance was successfully launched and reached the Running state.
+
+I used SSH to connect to the instance using the lab-provided credentials.
+
+6. Testing Internet Connectivity
+
+The final objective was to verify that the EC2 instance could communicate with an external destination.
+
+From the EC2 terminal, I executed:
+
+ping google.com
+
+The command returned successful replies from the external destination.
+
+<badge color="success">Connectivity test successful</badge>
+
+This confirmed that the configured networking components were working together to provide outbound internet connectivity.
+
+The successful test demonstrated that:
+
+- The VPC and subnet were configured.
+- The Internet Gateway was attached to the VPC.
+- The route table contained the appropriate internet route.
+- The subnet was associated with the route table.
+- The NACL and security group permitted the required traffic.
+- The EC2 instance had the necessary public network connectivity.
+
+Key Technical Takeaways
+
+This lab strengthened my understanding of how AWS networking components interact.
+
+Amazon VPC: Provides an isolated virtual network for AWS resources.
+
+Subnets: Divide a VPC address range into smaller network segments.
+
+Internet Gateway: Enables communication between a VPC and the internet when routing and addressing are correctly configured.
+
+Route Tables: Determine where network traffic is directed.
+
+Security Groups: Provide stateful, instance-level traffic controls.
+
+Network ACLs: Provide stateless, subnet-level traffic controls.
+
+EC2: Provides the compute environment used to validate network connectivity.
+
+Security and Production Considerations
+
+The lab used permissive network rules to demonstrate connectivity.
+
+In a production environment, I would apply the principle of least privilege by:
+
+- Restricting SSH access to trusted IP addresses or using a managed access method.
+- Limiting inbound traffic to the required ports and sources.
+- Reviewing NACL rules to ensure only necessary traffic is permitted.
+- Avoiding unrestricted public access where it is not required.
+- Monitoring network activity and reviewing security configurations.
+
+Conclusion
+
+I successfully completed the AWS networking exercise by designing and configuring a custom VPC environment and establishing internet connectivity for an EC2 instance.
+
+The exercise provided practical exposure to AWS networking fundamentals and demonstrated how routing, gateways, subnet associations and network security controls work together to support cloud connectivity.
+
+This was a completed AWS re/Start training lab conducted in a learning environment. The configuration should not be interpreted as a production deployment.
