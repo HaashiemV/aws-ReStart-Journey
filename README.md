@@ -34,7 +34,7 @@ A static restaurant website hosted using Amazon S3, demonstrating practical AWS 
 
 Technologies: HTML, CSS, Amazon S3.
 
-[View Project](projects/rusty-spoon/README.md) | [Live Website](https://rustyspoon-nambi.s3-website-eu-west-1.amazonaws.com/)
+[View Project](Projects/rusty-spoon/README.md) | [Live Website](https://rustyspoon-nambi.s3-website-eu-west-1.amazonaws.com/)
 
 3. 3D E-Commerce – AWS Architecture
 
@@ -44,7 +44,7 @@ Technologies: Amazon Route 53, CloudFront, S3, EC2, Lambda, DynamoDB, Aurora, El
 
 Project status: Architecture design.
 
-[View Project](projects/3d-ecommerce-architecture/README.md)
+[View Project](Projects/3d-ecommerce-architecture/README.md)
 
 4. Fishing Bru – Fishing Companion
 
@@ -54,7 +54,7 @@ Technologies: HTML, CSS, JavaScript.
 
 Project status: In progress.
 
-[View Project](projects/fishing-bru/README.md)
+[View Project](Projects/fishing-bru/README.md)
 
 ## 🛠️ Technical Skills
 
