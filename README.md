@@ -34,7 +34,7 @@ A static restaurant website hosted using Amazon S3, demonstrating practical AWS 
 
 Technologies: HTML, CSS, Amazon S3.
 
-"View Project" (projects/rusty-spoon/README.md) | "Live Website" (https://rustyspoon-nambi.s3-website-eu-west-1.amazonaws.com/)
+[View Project](projects/rusty-spoon/README.md) | [Live Website](https://rustyspoon-nambi.s3-website-eu-west-1.amazonaws.com/)
 
 3. 3D E-Commerce – AWS Architecture
 
