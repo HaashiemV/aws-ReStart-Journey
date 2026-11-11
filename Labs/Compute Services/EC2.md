@@ -1,80 +1,155 @@
 Introduction to Amazon EC2
 
-Overview: This lab provides you with a basic overview of launching, resizing, managing, and monitoring an Amazon EC2 instance.
+Lab Overview
 
-Amazon Elastic Compute Cloud (Amazon EC2) is a web service that provides resizable compute capacity in the cloud. It is designed to make web-scale cloud computing easier for developers.
+This lab explored the fundamentals of Amazon Elastic Compute Cloud (Amazon EC2), focusing on launching, configuring, monitoring and managing a virtual server in AWS.
 
-By the end of this lab, I will be able to:
-Launch a web server with termination protection enabled
-Monitor Your EC2 instance
-Modify the security group that your web server is using to allow HTTP access
-Resize your Amazon EC2 instance to scale
-Test termination protection
-Terminate your EC2 instance
+The objective was to deploy a basic web server using Amazon Linux 2023, configure network access, monitor instance health, modify compute and storage capacity, and test termination protection.
 
-Task 1: Launching your EC2 instance
-Step 1: Naming my EC2 instance - Web Server
-Step 2: Choosing an Amazon Machine Image (AMI) - Amazon Linux 2023*
-Step 3: Choosing an instance type - t3.micro
-Step 4: Configuring a key pair - selecting "Proceed without a key pair (Not recommended)"
-Step 5: Configuring the network settings 
-Step 5.1: In the Network settings pane, chose Edit
-For VPC - required, selected Lab VPC.
-Still in the Network settings pane, I configured the Security Group as follows:
-Security group name - required: Web Server security group
-Description: Security group for my web server
-Under Inbound security groups rules selected the Remove button
-Step 6: Adding storage - kept the default storage configuration 8 GiB disk volume
-Step 7: Configuring advanced details 
-- Expanded the Advanced details pane.
-- Selected the dropdown for Termination protection, then chose Enable.
+Duration: Approximately 45 minutes
+Service: Amazon EC2
+Operating System: Amazon Linux 2023
+Initial Instance Type: "t3.micro"
 
-*When you launch an instance in Amazon EC2, you have the option of passing user data to the instance. These commands can be used to perform common automated configuration tasks and even run scripts after the instance starts. 
+Learning Objectives
 
-Copied the following commands, and pasted them into the User data text box.
+By completing this lab, I gained practical experience in:
+
+- Launching and configuring an EC2 instance.
+- Enabling termination protection.
+- Monitoring EC2 instance status and CloudWatch metrics.
+- Configuring security groups to allow HTTP traffic.
+- Deploying a basic Apache web server using EC2 user data.
+- Resizing an EC2 instance.
+- Increasing EBS volume capacity.
+- Testing termination protection and safely terminating an instance.
+
+1. Launching the EC2 Instance
+
+I launched an EC2 instance with the following configuration:
+
+Configuration| Selection
+Instance name| Web Server
+Amazon Machine Image| Amazon Linux 2023
+Initial instance type| "t3.micro"
+vCPU| 2
+Memory| 1 GiB
+Key pair| Proceed without a key pair
+Network| Lab VPC
+Security group| Web Server security group
+Root EBS volume| 8 GiB
+Termination protection| Enabled
+
+A key pair was not configured because direct login to the instance was not required for this exercise.
+
+Apache Web Server Installation
+
+I used EC2 user data to automate the installation and configuration of the Apache HTTP server during instance launch.
+
 #!/bin/bash
 yum -y install httpd
 systemctl enable httpd
 systemctl start httpd
 echo '<html><h1>Hello From Your Web Server!</h1></html>' > /var/www/html/index.html
 
-The above script does the following:
-- Install an Apache web server (httpd)
-- Configure the web server to automatically start on boot
-- Activate the Web server
-- Create a simple web page
-- 
-Step 8: Launching an EC2 instance - Successfully initiated launch of instance (i-084c5658cbeda4fc9)
+This script installed Apache, configured it to start automatically and created a basic HTML landing page.
 
-Task 2: Monitor Your Instance
-Step 1: Selected the instance by checking the box next to the instance and navigated to the bottom of the screen to the Status checks tab.
-Confirmed All Status Checks Passed
+After launching the instance, I waited for its state to show Running and its status checks to pass.
 
-Task 3: Update Your Security Group and Access the Web Server
-When I launched the EC2 instance, I provided a script that installed a web server and created a simple web page. In this task, I will access content from the web server.
-Step 1: Selected the instance by checking the box and selected the Details tab.
-Step 2: Copied the Public IPv4 address of your instance to your clipboard.
-Step 3: Open a new tab in your web browser, pasted the IP address I copied, then press Enter. 
-Outcome: Unable to access my web server because the security group is not permitting inbound traffic on port 80, which is used for HTTP web requests.
+2. Monitoring the EC2 Instance
 
-Step 4: Went back to the EC2 Management Console tab.
-Step 5: In the left navigation pane, selected Security Groups located under Network & Security.
-Step 6: Selected  Web Server security group.
-Step 7: Selected the Inbound rules tab.
-- Confirmed the security group currently has no rules.
-- Selected Edit inbound rules then select Add rule and configured the rule with the following settings:
-Type: HTTP
-Source: Anywhere-IPv4
-Selected Save rules
+I reviewed the EC2 monitoring information to understand the health and performance indicators available for an instance.
 
-Step 8: Return to the web server tab that you previously opened and refresh  the page.
-You should see the message Hello From Your Web Server!
+The lab covered:
 
-Success :)
-- <img width="1714" height="293" alt="image" src="https://github.com/user-attachments/assets/172b74d6-fa6c-4f29-9bfd-81fc3fb928fa" />
+- System status checks: Assessing the underlying AWS infrastructure.
+- Instance status checks: Assessing the operating system and instance accessibility.
+- CloudWatch monitoring: Reviewing metrics such as CPU utilisation and network activity.
+- Instance screenshots: Using the console's screenshot functionality as a troubleshooting aid.
 
+Basic monitoring provides metrics at five-minute intervals, while detailed monitoring can provide one-minute intervals.
 
+3. Configuring Network Access
 
+Initially, the web server could not be accessed through a browser.
 
+After investigating the issue, I identified that the security group did not contain an inbound rule allowing HTTP traffic.
 
+I updated the security group to allow:
 
+Setting| Configuration
+Type| HTTP
+Protocol| TCP
+Port| 80
+Source| Anywhere-IPv4
+
+After saving the rule, I refreshed the browser and successfully accessed the web server.
+
+Successful response:
+
+"Hello From Your Web Server!"
+
+This demonstrated how security group rules control inbound network traffic to EC2 instances.
+
+4. Resizing the EC2 Instance
+
+I explored how to modify the compute capacity of an EC2 instance.
+
+The process involved:
+
+1. Stopping the running EC2 instance.
+2. Navigating to the instance type configuration.
+3. Changing the instance type from "t3.micro" to "t3.small".
+4. Applying the updated configuration.
+5. Starting the instance again.
+
+This exercise demonstrated how instance types can be changed to accommodate different compute requirements.
+
+5. Increasing EBS Storage Capacity
+
+I also practised modifying the storage capacity attached to the EC2 instance.
+
+The root EBS volume was increased from:
+
+- Original size: 8 GiB
+- Updated size: 10 GiB
+
+This demonstrated how Elastic Block Store (EBS) volumes can be expanded to provide additional storage capacity.
+
+6. Testing Termination Protection
+
+Termination protection was enabled during the initial instance configuration.
+
+I attempted to terminate the instance while protection was enabled. The termination attempt was blocked, demonstrating that the protection setting helps prevent accidental deletion.
+
+I then:
+
+1. Disabled termination protection.
+2. Repeated the termination operation.
+3. Successfully terminated the EC2 instance.
+
+This exercise demonstrated the importance of safeguards when managing cloud infrastructure.
+
+Key Takeaways
+
+Through this practical exercise, I developed a better understanding of:
+
+- Provisioning virtual servers using Amazon EC2.
+- Automating software installation through user data.
+- Managing inbound traffic using security groups.
+- Monitoring instance health and performance.
+- Scaling compute resources by changing instance types.
+- Expanding storage using Amazon EBS.
+- Protecting infrastructure against accidental termination.
+
+Security and Operational Considerations
+
+The lab used an HTTP inbound rule open to Anywhere-IPv4 to demonstrate web access.
+
+In a production environment, network access should be restricted to the required sources wherever possible. Public-facing applications should also use HTTPS, and infrastructure changes should follow appropriate operational controls.
+
+Termination protection is useful as an additional safeguard, but it should not replace backups, monitoring or sound resource-management practices.
+
+---
+
+This documentation reflects a completed AWS re/Start practical lab. The environment was used for learning and experimentation and should not be interpreted as a production deployment.
